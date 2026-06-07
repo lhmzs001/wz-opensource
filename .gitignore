@@ -1,0 +1,12 @@
+*.xml
+*.iml
+.idea/
+.DS_Store
+build/
+.gradle/
+/local.properties
+*.keystore
+*.jks
+*.log
+*.tmp
+.idea/wz-opensource.iml
