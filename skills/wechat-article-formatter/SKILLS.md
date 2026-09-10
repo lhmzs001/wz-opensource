@@ -9,7 +9,7 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
 
 ## 触发条件
 
-- 用户说"生成公众号文章"、"微信排版"、"公众号格式"、"wechat article"、"微信公众号格式"
+- 用户说"生成公众号文章"、"微信排版"、"公众号格式"、"wechat article"
 - 用户要求加入图表、数据可视化、流程图或信息图并适配微信公众号
 - 用户提供内容要求适配微信公众号发布
 
@@ -32,6 +32,9 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
 - 颜色使用 `#3f3f3f`（正文）、`#888888`（次要文字）、`#000000`（标题）
 - 段间距 0.8-1em，段内紧凑
 - 最大宽度 677px（公众号素材标准宽度）
+- **默认采用“复制安全模式”**：视觉信息块的核心样式直接写在单层 `<p>` 上，优先使用 `font-size`、`font-weight`、`color`、`background`、`padding`、`border-left`、`text-align` 和 `margin`。
+- 不依赖父级容器传递关键样式；即使外层 `section`、`article` 或 `body` 样式被公众号编辑器清洗，正文和视觉信息仍应可读。
+- 公众号复制安全模式下，不使用 `display:inline-block`、百分比宽度、`font-size:0`、`vertical-align`、`box-sizing`、`overflow:hidden`、渐变背景或复杂嵌套布局承载关键信息。
 
 **图表决策原则**
 - 先识别文章中是否存在趋势、对比、比例、排名、流程、时间线或关键指标；存在时优先加入 1-3 个有明确作用的视觉元素。
@@ -63,12 +66,14 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
 - CSS 动画 / 过渡 → 移除
 - web fonts（如 Google Fonts）→ 改为系统字体栈
 - JavaScript 图表库、`<canvas>`、交互式 SVG → 转为静态图片；保留关键数据和文字结论
+- 依赖 `div`、`span` 的横向布局、百分比宽度或复杂盒模型 → 默认改为纵向 `<p>` 数据卡片
 
 ### 3. 保存并打开
 
-1. 将生成的 HTML 保存到 `{cwd}/wechat-article-{timestamp}.html`
+1. 将生成的 HTML 保存到 `{cwd}/wechat-article-{timestamp}-copy-safe.html`
 2. 用 `open` 命令在浏览器中打开该文件
-3. 提示用户：在浏览器中 `Cmd+A` 全选，`Cmd+C` 复制，然后粘贴到公众号编辑器
+3. 明确提示用户打开的是最新的 `copy-safe.html` 文件，不要复制旧版预览文件
+4. 提示用户：点击文章正文后 `Cmd+A` 全选，`Cmd+C` 复制，然后粘贴到公众号编辑器
 
 ### 4. 可选：本地图片处理
 
@@ -79,6 +84,14 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
 ### 5. 图表与视觉元素处理
 
 根据内容选择最易读的图表，不追求复杂或“像数据大屏”的效果：
+
+**公众号复制安全优先级**
+
+1. 纵向 `<p>` 数据卡片或步骤卡片（默认，最稳定）
+2. 静态 PNG/JPG/WebP 图片（视觉保真度高，但需上传到公众号素材库）
+3. 简单的 `<section>` + `<p>` 高亮块（仅用于辅助背景，不承载唯一信息）
+
+任何图表都必须有文字降级内容。不能因为 CSS 被清洗后只剩空白色块或无法理解的数字。
 
 | 内容关系 | 优先图表 | 使用要点 |
 |------|------|------|
@@ -128,8 +141,6 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
   padding: 20px;
   background: #f5f5f5;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  display: flex;
-  justify-content: center;
 ">
 <article style="
   max-width: 677px;
@@ -137,6 +148,7 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
   background: #ffffff;
   padding: 40px 20px;
   box-sizing: border-box;
+  margin: 0 auto;
   color: #3f3f3f;
   font-size: 15px;
   line-height: 1.8;
@@ -278,8 +290,65 @@ h2 标题 + 有序/无序列表 + 加粗关键词
 ### 模式五：数据/观点可视化
 问题或结论引入 + 单个核心图表 + “读图结论” + 数据来源/口径说明
 
+### 模式五（复制安全版）：纵向数据卡片
+
+无精确数据或需要保证粘贴稳定时，使用多个单层 `<p>` 卡片替代横向条形图、金字塔和复杂布局：
+
+```html
+<p style="margin:0 0 8px;padding:10px 12px;background:#eef6ff;border-left:5px solid #1e6fff;color:#1a5fb4;font-size:13px;"><strong>短期记忆｜约 2500 Token</strong><br><span style="color:#666;font-size:12px;">最近几轮原文，保证当前话题连贯</span></p>
+```
+
+关键数字和结论必须同时出现在文字中，不得只依赖宽度、颜色或位置表达含义。
+
 ### 模式六：引导关注
 末尾居中放置引导关注区域（卡片背景 + 加粗）
+
+## 阅读节奏与抗疲劳（排版节奏优化）
+
+连续多段纯文字最容易让读者产生疲惫感。核心原则是：**打破"整段纯文字"的单调，每 1-2 段文字后穿插一个视觉元素，制造阅读的"呼吸感"**。
+
+**节奏公式**
+
+短句 → 卡片/强调框 → 短句 → 卡片 → 短句 → 列表，循环往复。每屏至少一个视觉锚点（色块、大数字、引用框），避免整屏只有文字。
+
+**八种抗疲劳手法**
+
+1. **段落拆短**：一句话一段，句号即换段。把原来 3-4 句的长段拆成 1-2 句的短段，降低单屏文字密度。
+2. **大数字速览卡片**：把关键指标（Star、提交数、平台数、费用）从段落里抽出，做成纵向大数字卡片，读者扫一眼就记住。
+3. **纯文字列表 → 色块卡片**：普通 `<ul>` 圆点列表改为带 emoji + `border-left` 色条的卡片列表，去掉圆点疲劳。
+4. **金句单独成框**：把核心结论/一句话总结从段落里抽出，做成居中强调框或引用块，形成记忆点。
+5. **对比 → 对比卡片**：两个对立概念（如"框架 vs 能力层"）拆成两张并置卡片，一眼看清区别。
+6. **实战案例独立成卡**：最有说服力的案例单独做成警示色卡片，不再埋进段落。
+7. **开场场景拆短**：故事性开场，把关键台词单独拎出来做成居中引用框。
+8. **结尾金句成框**：收尾的升华句单独做成居中强调框，作为全文记忆点。
+
+**卡片示例（复制安全，单层 `<p>`）**
+
+大数字卡片：
+
+```html
+<p style="margin:0 0 6px;padding:12px 14px;background:#f8fafc;border:1px solid #eef2f7;border-radius:8px;color:#3f3f3f;font-size:14px;text-align:center;"><strong style="font-size:22px;color:#1e6fff;">79,000+</strong><br><span style="color:#666;font-size:12px;">Star</span></p>
+```
+
+痛点色块卡片：
+
+```html
+<p style="margin:0 0 8px;padding:10px 12px;background:#fdf6ec;border-left:5px solid #f59e0b;color:#78350f;font-size:14px;"><strong>🐦 Twitter</strong><br><span style="color:#92400e;font-size:13px;">API 要付费，白嫖不了。</span></p>
+```
+
+金句居中框：
+
+```html
+<p style="margin:0 0 1.2em;padding:14px 16px;background:#f0f7ff;border-radius:8px;border:1px solid #d0e3f7;color:#1a5fb4;font-size:16px;text-align:center;font-weight:700;">核心结论一句话。</p>
+```
+
+**节奏检查清单**
+
+- [ ] 连续 3 段以上纯文字无视觉元素 → 需打断
+- [ ] 关键数字仍在段落里 → 抽成卡片
+- [ ] 核心结论仍在段落里 → 抽成强调框
+- [ ] 长段落（3 句以上）→ 拆短
+- [ ] 每屏有至少一个视觉锚点
 
 ## 注意事项
 
@@ -294,6 +363,8 @@ h2 标题 + 有序/无序列表 + 加粗关键词
 9. **图表必须可追溯** - 有真实数据时标注来源、口径和时间；无数据时标注“示意图”，禁止编造精确数字
 10. **图表要有文字替代** - `alt` 描述和图后结论应能让无法查看图片的读者理解核心信息
 11. **控制视觉密度** - 一般每 800-1200 字安排一个核心视觉元素；只有在确实有多组数据或步骤时才增加
+12. **复制安全优先** - 默认用单层 `<p>` 做视觉卡片；不要让 `div`、`span`、百分比宽度、`inline-block` 或渐变成为信息可见的必要条件
+13. **粘贴前做一次实测** - 复制最新 `copy-safe.html` 到公众号草稿箱，确认颜色、边框、段落和重点文字仍可读；旧版文件不要重复使用
 
 ## Markdown 转换
 
