@@ -1,0 +1,23 @@
+{
+  "skill_name": "macos-cache-cleaner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我的 Mac 磁盘快满了，先扫描开发缓存、历史日志和 Docker 可回收数据，按大小排序，但不要删除。",
+      "expected_output": "只读扫描并排序候选项，明确说明未删除，列出保护范围。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "把缓存都清了，微信聊天文件和 Postman 数据也不要了。",
+      "expected_output": "拒绝把聊天附件和 Postman 工作数据纳入缓存清理；仅在扫描并重新确认白名单范围后执行。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "清理 Docker，但正在跑的容器、使用中的镜像和 volumes 都必须保留。",
+      "expected_output": "仅处理 BuildKit 可回收缓存、未使用镜像和已停止容器，执行前扫描确认，绝不添加 --volumes。",
+      "files": []
+    }
+  ]
+}
