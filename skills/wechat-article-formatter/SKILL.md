@@ -117,10 +117,10 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
 
 ```html
 <section style="margin:1.2em 0;padding:14px 12px;background:#fafafa;border:1px solid #eeeeee;border-radius:8px;">
-  <p style="margin:0 0 0.7em;font-size:16px;font-weight:600;color:#000;text-align:left;">图：过去 5 年用户增长趋势</p>
-  <img src="https://..." alt="折线图显示用户数从 2020 年到 2024 年总体上升，2023 年增速放缓" style="display:block;width:100%;height:auto;margin:0 auto;border-radius:4px;">
-  <p style="margin:0.6em 0 0;text-align:center;font-size:12px;color:#888888;line-height:1.6;">数据来源：内部统计；统计时间：2020-2024 年</p>
-  <p style="margin:0.6em 0 0;font-size:14px;color:#3f3f3f;line-height:1.7;"><strong>读图结论：</strong>用户数持续增长，但 2023 年后增速明显放缓。</p>
+    <p style="margin:0 0 0.7em;font-size:16px;font-weight:600;color:#000;text-align:left;">图：过去 5 年用户增长趋势</p>
+    <img src="https://..." alt="折线图显示用户数从 2020 年到 2024 年总体上升，2023 年增速放缓" style="display:block;width:100%;height:auto;margin:0 auto;border-radius:4px;">
+    <p style="margin:0.6em 0 0;text-align:center;font-size:12px;color:#888888;line-height:1.6;">数据来源：内部统计；统计时间：2020-2024 年</p>
+    <p style="margin:0.6em 0 0;font-size:14px;color:#3f3f3f;line-height:1.7;"><strong>读图结论：</strong>用户数持续增长，但 2023 年后增速明显放缓。</p>
 </section>
 ```
 
@@ -132,9 +132,9 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>公众号文章</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公众号文章</title>
 </head>
 <body style="
   margin: 0;
@@ -154,7 +154,7 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
   line-height: 1.8;
   letter-spacing: 0.5px;
 ">
-  <!-- 内容区域 -->
+    <!-- 内容区域 -->
 </article>
 </body>
 </html>
@@ -170,6 +170,34 @@ description: 将 HTML / Markdown 内容转成微信公众号富文本格式，�
 <h3 style="font-size:18px;font-weight:600;color:#000;margin:0.8em 0 0.5em;line-height:1.4;">标题三</h3>
 <h4 style="font-size:16px;font-weight:600;color:#000;margin:0.6em 0 0.4em;line-height:1.4;">标题四</h4>
 ```
+
+### 清爽青绿标题（推荐的公众号长文样式）
+
+当用户提供了类似“青绿色胶囊标题、竖线小标题、细线结尾”的视觉参考，或文章需要更轻、更有呼吸感的章节层级时，优先使用这套样式。它适合知识分享、工具教程和个人经验类文章；不要把它强制用于严肃公告、法律通知或品牌规范已经固定的文章。
+
+**层级规则**
+
+- 主标题仍使用简洁的居中大标题，避免把标题做成厚重色块。
+- 一级章节标题（`h2`）使用居中的青绿色圆角胶囊，文字白色，字号约 18-20px，内边距 8px 22px。复制安全模式下可用 `display:table` 配合 `margin-left:auto;margin-right:auto` 实现自然宽度；不使用 `inline-block`、图片或渐变。
+- 二级标题（`h3`）使用左侧 4px 青绿色竖线和底部 1px 青绿色虚线，字号约 16-18px，内边距 7px 10px。标题较长时允许自然换行，不压缩字号。
+- 青绿色建议使用 `#16b89a` 或相近色；正文继续使用 `#3f3f3f`，警示信息仍使用红色或橙色，不要整篇只用一种颜色。
+
+**可复制模板**
+
+```html
+<h2 style="display:table;margin:1.8em auto 0.9em;padding:8px 22px;background:#16b89a;border-radius:6px;color:#ffffff;font-size:19px;font-weight:700;line-height:1.45;text-align:center;letter-spacing:0;">二、章节标题</h2>
+<h3 style="margin:1.2em 0 0.6em;padding:7px 10px;border-left:4px solid #16b89a;border-bottom:1px dashed #16b89a;color:#222222;font-size:17px;font-weight:700;line-height:1.45;letter-spacing:0;">1. 小节标题</h3>
+```
+
+### 细线互动收尾
+
+个人账号的知识分享或教程文章，可以在参考资料之前加入一段轻量互动收尾，复用第二张参考图的结构：顶部一条细青绿色横线，下面是自然口吻的感谢和互动邀请，关键动作使用青绿色加粗。互动句必须与作者真实的发布习惯一致，不要把“点赞、转发、再看、留言”当成所有文章的固定结尾。
+
+```html
+<p style="margin:2em 0 1.2em;padding-top:16px;border-top:1px solid #16b89a;color:#3f3f3f;font-size:15px;line-height:1.9;text-align:left;">谢谢您看我的文章，以上就是今天的分享，觉得有帮助，帮我一键三连：<strong style="color:#16a085;">点赞、转发、再看</strong>和<strong style="color:#16a085;">留言</strong>，你的反馈对我很重要！</p>
+```
+
+结尾互动句不能替代文章结论，也不能伪造读者反馈或承诺平台效果。若用户没有要求互动引导，保留原有收束段落即可。
 
 ### 段落
 
